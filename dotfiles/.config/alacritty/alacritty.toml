@@ -1,0 +1,11 @@
+[font]
+
+[font.normal]
+# family = "MesloLGS NF"
+
+[scrolling]
+history = 10000
+
+[window]
+dynamic_title = true
+title = "Alacritty"
