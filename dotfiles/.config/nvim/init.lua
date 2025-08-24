@@ -84,7 +84,7 @@ config = function()
 })
 
 require('Comment').setup()
-vim.cmd('colorscheme rose-pine-moon')
+vim.cmd('colorscheme rose-pine')
 --require("Navigator").setup()
 require("autoclose").setup()
 --Navigator

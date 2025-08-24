@@ -23,6 +23,9 @@ set $menu $rofi_cmd -show combi -combi-modes run#run -modes combi
 output * bg ~/.config/sway/wallpapers/wallpaper.png fill
 
 font pango:MesloLGS NF 9.3
+
+exec gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+exec gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
 #
 # Example configuration:
 #
@@ -49,27 +52,15 @@ input 5426:124:Razer_DeathAdder_V2_Pro {
 
 
 # ## Colours
-set $base00 #282828
-set $base01 #3c3836
-set $base02 #504945
-set $base03 #665c54
-set $base04 #d5c4a1
-set $base05 #ebdbb2
-set $base06 #fbf1c7
-set $base07 #ebdbb2
-set $base08 #cc241d
-set $base09 #d65d0e
-set $base0A #d79921
-set $base0B #98971a
-set $base0C #458588
-set $base0D #895499
-set $base0E #689d6a
-set $base0F #a89984
-client.background n/a #434c5e n/a
-client.focused $base0D #434c5e #eceff4 #434c5e #434c5e
-client.focused_inactive #3b4252 #3b4252 #eceff4 #3b4252 #3b4252
-client.unfocused #3b4252 #3b4252 #eceff4 #3b4252 #3b4252
-client.urgent #434c5e #434c5e #eceff4 #434c5e #434c5e
+set $base #191724
+set $surface #1f1d2e
+set $overlay #e0def4
+set $focuscolor #908caa
+client.background n/a $base n/a
+client.focused $focuscolor $base $overlay $base $base
+client.focused_inactive $surface $surface $overlay $surface $surface
+client.unfocused $surface $surface $overlay $surface $surface
+client.urgent $base $base $overlay $base $base
 #
 # ## Window Colours
 #client.focused   $base0D  $base00  $base06  $base08  $base09
