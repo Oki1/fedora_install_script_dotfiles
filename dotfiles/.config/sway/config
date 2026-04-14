@@ -20,12 +20,14 @@ set $menu $rofi_cmd -show combi -combi-modes run#run -modes combi
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 # Requires: desktop-backgrounds-compat, swaybg, jxl-pixbuf-loader
-output * bg ~/.config/sway/wallpapers/wallpaper.png fill
+# output * bg ~/.config/sway/wallpapers/wallpaper.png fill
+output * bg ~/.config/sway/wallpapers/schmick3.jpg fill
 
 font pango:MesloLGS NF 9.3
 
 exec gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
 exec gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
+exec flameshot
 #
 # Example configuration:
 #
@@ -110,6 +112,13 @@ input "type:keyboard" {
 #
     # Start a terminal
     bindsym $mod+Return exec $term
+
+    set $term_cur_dir alacritty --working-directory "$(~/.config/sway/getcurdir.sh)"
+    bindsym $mod+Shift+Return exec $term_cur_dir 
+
+
+
+    bindsym --no-repeat Shift+Print exec flameshot gui
 
     # Kill focused window
     bindsym $mod+Shift+q kill
