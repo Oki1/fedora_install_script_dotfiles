@@ -1,3 +1,22 @@
+-- Function for loading environment variables
+local function load_env_file(filename)
+    local env_file = io.open(filename, "r")
+    if not env_file then return end
+
+    for line in env_file:lines() do
+        for key, value in string.gmatch(line, "([A-Za-z_][A-Za-z0-9_]*)=(.*)") do
+            if not vim.env[key] then
+                vim.env[key] = value
+            end
+        end
+    end
+
+    env_file:close()
+end
+
+-- Load .env file safely
+load_env_file("./.env")
+
 -- disable netrw at the very start of your init.lua
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
@@ -55,35 +74,100 @@ lazy.opts = {}
 
 --plugins
 lazy.setup({
-{ 'rose-pine/neovim', name = 'rose-pine' },
-{'williamboman/mason.nvim'},
-{'williamboman/mason-lspconfig.nvim'},
-{'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
-{'neovim/nvim-lspconfig'},
-{'hrsh7th/cmp-nvim-lsp'},
-{'hrsh7th/nvim-cmp'},
-{'L3MON4D3/LuaSnip'},
-{'m4xshen/autoclose.nvim'},
-{'nvim-telescope/telescope.nvim', dependencies = { 'nvim-lua/plenary.nvim' }},
-{'ms-jpq/chadtree', branch='chad', build='python3 -m chadtree deps'},
-{
-    'numToStr/Comment.nvim',
-    opts = {
-        -- add any options here
+	{ 'rose-pine/neovim', name = 'rose-pine' },
+	{'williamboman/mason.nvim'},
+	{'williamboman/mason-lspconfig.nvim'},
+	{'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
+	{'neovim/nvim-lspconfig'},
+	{'hrsh7th/cmp-nvim-lsp'},
+	{'hrsh7th/nvim-cmp'},
+	{'L3MON4D3/LuaSnip'},
+	{'m4xshen/autoclose.nvim'},
+	{'nvim-telescope/telescope.nvim', dependencies = { 'nvim-lua/plenary.nvim' }},
+	{'ms-jpq/chadtree', branch='chad', build='python3 -m chadtree deps'},
+	{
+	    'numToStr/Comment.nvim',
+	    opts = {
+		-- add any options here
+	    },
+	    lazy = false,
+	},
+	--{'numToStr/Navigator.nvim', }
+	{'lervag/vimtex',
+	config = function()
+	    vim.cmd([[
+	    let g:vimtex_view_method= 'zathura'
+	    ]])
+	    end
+	},
+    { "zbirenbaum/copilot.lua",
+      requires = {
+        "copilotlsp-nvim/copilot-lsp", -- (optional) for NES functionality
+      },
     },
-    lazy = false,
-},
---{'numToStr/Navigator.nvim', }
-{'lervag/vimtex',
-config = function()
-    vim.cmd([[
-    let g:vimtex_view_method= 'zathura'
-    ]])
-    end
-},
+    {
+      "yetone/avante.nvim",
+      build = vim.fn.has("win32") ~= 0
+          and "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false"
+          or "make",
+      event = "VeryLazy",
+      version = false, -- Never set this value to "*"! Never!
+      ---@module 'avante'
+      ---@type avante.Config
+      opts = {
+        -- add any opts here
+        -- this file can contain specific instructions for your project
+        instructions_file = "avante.md",
+        -- for example
+        provider = "copilot",
+      },
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+        "MunifTanjim/nui.nvim",
+        --- The below dependencies are optional,
+        "nvim-mini/mini.pick", -- for file_selector provider mini.pick
+        "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+        "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+        "ibhagwan/fzf-lua", -- for file_selector provider fzf
+        "stevearc/dressing.nvim", -- for input provider dressing
+        "folke/snacks.nvim", -- for input provider snacks
+        "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+        "zbirenbaum/copilot.lua", -- for providers='copilot'
+        {
+          -- support for image pasting
+          "HakonHarnes/img-clip.nvim",
+          event = "VeryLazy",
+          opts = {
+            -- recommended settings
+            behaviour = {
+              auto_approve_tool_permissions = false,
+            },
+            default = {
+              embed_image_as_base64 = false,
+              prompt_for_file_name = false,
+              drag_and_drop = {
+                insert_mode = true,
+              },
+              -- required for Windows users
+              use_absolute_path = true,
+            },
+          },
+        },
+        {
+          -- Make sure to set this up properly if you have lazy=true
+          'MeanderingProgrammer/render-markdown.nvim',
+          opts = {
+            file_types = { "markdown", "Avante" },
+          },
+          ft = { "markdown", "Avante" },
+        },
+      },
+    }
 })
 
+
 require('Comment').setup()
+require('copilot').setup({copilot_model= "claude-opus-4-5"})
 vim.cmd('colorscheme rose-pine')
 --require("Navigator").setup()
 require("autoclose").setup()
